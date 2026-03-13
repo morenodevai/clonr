@@ -34,7 +34,7 @@ class DiskCard(QWidget):
         layout.setSpacing(6)
 
         self._icon  = QLabel("💽")
-        self._icon.setFont(QFont("Segoe UI", 26))
+        self._icon.setFont(QFont("Segoe UI", 32))
         self._icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self._name  = QLabel("Click to select")
