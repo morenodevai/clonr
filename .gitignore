@@ -6,11 +6,10 @@ __pycache__/
 .Python
 *.egg-info/
 dist/
-build/
-*.spec
 
 # PyInstaller output
 /release/
+/build/
 
 # Virtual environments
 venv/
