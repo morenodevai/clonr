@@ -16,7 +16,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout, QHBoxLayout, QProgressBar, QSizePolicy,
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QObject
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QIcon
 
 from clonr import disk as disk_mod
 from clonr.disk import DiskInfo
@@ -53,6 +53,7 @@ class ClonrWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Clonr")
+        self.setWindowIcon(QIcon("assets/icon.ico"))
         self.setMinimumSize(620, 520)
         self.setStyleSheet(STYLESHEET)
 
