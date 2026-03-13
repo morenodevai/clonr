@@ -43,8 +43,8 @@ class CloneWorker(QObject):
             self.finished.emit()
         except (OSError, ValueError) as e:
             self.error.emit(str(e))
-        except Exception as e:
-            self.error.emit(f"Unexpected error: {traceback.format_exc()}")
+        except Exception:
+            self.error.emit(traceback.format_exc())
 
 
 # ── Main window ───────────────────────────────────────────────────────────────
@@ -271,6 +271,8 @@ class ClonrWindow(QMainWindow):
         self._worker = None
 
     def _on_progress(self, done: int, total: int) -> None:
+        if total == 0:
+            return
         pct     = int(done / total * 100)
         elapsed = time.monotonic() - self._start
         speed   = done / elapsed if elapsed > 0 else 0
@@ -294,6 +296,9 @@ class ClonrWindow(QMainWindow):
         self._btn_clone.setText("Done")
 
     def _on_error(self, msg: str) -> None:
+        self._progress_container.hide()
+        self._progress_bar.setValue(0)
+        self._progress_stats.setText("")
         self._warn.setText(f"Error: {msg}")
         self._warn.show()
         self._btn_clone.setEnabled(True)

@@ -14,7 +14,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QFont
 
 from clonr.disk import DiskInfo
-from gui.style import TEXT_DIM, ACCENT
+from gui.style import TEXT_DIM, ACCENT, BORDER
 
 
 # ── DiskCard ──────────────────────────────────────────────────────────────────
@@ -25,7 +25,7 @@ class DiskCard(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setObjectName("DiskCard")
-        self.setFixedSize(220, 140)
+        self.setFixedSize(220, 160)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self._disk: DiskInfo | None = None
 
@@ -34,7 +34,7 @@ class DiskCard(QWidget):
         layout.setSpacing(6)
 
         self._icon  = QLabel("💽")
-        self._icon.setFont(QFont("Segoe UI", 32))
+        self._icon.setFont(QFont("Segoe UI", 42))
         self._icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self._name  = QLabel("Click to select")
@@ -125,8 +125,7 @@ class DiskPicker(QWidget):
         cancel.setObjectName("BtnCancel")
         cancel.clicked.connect(self.cancelled.emit)
         select = QPushButton("Select")
-        select.setObjectName("BtnConfirm")
-        select.setStyleSheet(f"background-color: {ACCENT};")
+        select.setObjectName("BtnClone")
         select.clicked.connect(self._on_select)
         btns.addWidget(cancel)
         btns.addWidget(select)
@@ -174,7 +173,7 @@ class ConfirmModal(QWidget):
 
         disk_label = QLabel(f"  {dst.friendly_name}  —  {dst.size_gb:.1f} GB")
         disk_label.setFont(QFont("Segoe UI", 13, QFont.Weight.Bold))
-        disk_label.setStyleSheet(f"color: white; background: #2a2d3e; border-radius: 6px; padding: 10px;")
+        disk_label.setStyleSheet(f"color: white; background: {BORDER}; border-radius: 6px; padding: 10px;")
         inner.addWidget(disk_label)
 
         warning = QLabel("This cannot be undone.\nAll data on this disk will be permanently lost.")

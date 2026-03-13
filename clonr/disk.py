@@ -160,7 +160,9 @@ def clone(src: int, dst: int, chunk_bytes: int = DEFAULT_CHUNK_BYTES,
         _close(src_handle)
 
 
-def _stream_copy(src, dst, total_bytes, chunk_bytes, progress_cb) -> None:
+def _stream_copy(src: wintypes.HANDLE, dst: wintypes.HANDLE,
+                 total_bytes: int, chunk_bytes: int,
+                 progress_cb: Callable[[int, int], None] | None) -> None:
     """Read src in chunks and write to dst."""
     kernel32    = ctypes.windll.kernel32
     bytes_done  = 0
@@ -184,4 +186,7 @@ def _stream_copy(src, dst, total_bytes, chunk_bytes, progress_cb) -> None:
 
         bytes_done += read_out.value
         if progress_cb:
-            progress_cb(bytes_done, total_bytes)
+            try:
+                progress_cb(bytes_done, total_bytes)
+            except Exception:
+                pass  # never let a buggy progress callback abort a clone

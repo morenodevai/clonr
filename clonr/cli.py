@@ -68,7 +68,8 @@ def cmd_clone(args) -> int:
     src_info = disks[src]
     dst_info = disks[dst]
 
-    # Size check before asking for confirmation — don't waste the user's time
+    # Warn about size mismatch early — disk.clone() will also enforce this,
+    # but we show it here so the user doesn't type YES and then get an error.
     if dst_info.size_bytes < src_info.size_bytes:
         print(
             f"\n  Error: destination ({dst_info.size_gb:.1f} GB) is smaller "
@@ -109,8 +110,14 @@ def main() -> None:
     sub.add_parser("list", help="List all physical disks")
 
     p_clone = sub.add_parser("clone", help="Clone one disk to another")
-    p_clone.add_argument("src", type=int, metavar="SRC", help="Source disk number")
-    p_clone.add_argument("dst", type=int, metavar="DST", help="Destination disk number")
+    def non_negative_int(value):
+        n = int(value)
+        if n < 0:
+            raise argparse.ArgumentTypeError(f"Disk number must be >= 0, got {n}")
+        return n
+
+    p_clone.add_argument("src", type=non_negative_int, metavar="SRC", help="Source disk number")
+    p_clone.add_argument("dst", type=non_negative_int, metavar="DST", help="Destination disk number")
 
     args = parser.parse_args()
 
